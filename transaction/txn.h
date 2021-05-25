@@ -6,8 +6,6 @@
 #define ENCODINGS_TXN_H
 
 #include <vector>
-#define sec second
-#define fir first
 
 struct Tnx_item {
     char cmd;   // r or w

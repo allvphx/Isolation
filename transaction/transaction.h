@@ -2,18 +2,16 @@
 // Created by pan on 25/5/21.
 //
 
-#ifndef ENCODINGS_READ_UNCOMMITED_H
-#define ENCODINGS_READ_UNCOMMITED_H
+#ifndef ENCODINGS_TRANSACTION_H
+#define ENCODINGS_TRANSACTION_H
 
-#include "lock.h"
-#include "rw.h"
-#include "txn.h"
+#include "../isolation_levels/read_uncommited.h"
 
-class Txn_manager {
-    Storage *store;
+class Tnx_manager {
+    RU_storage *store;
 
 public:
-    explicit Txn_manager(Storage* _store) {
+    explicit Tnx_manager(RU_storage* _store) {
         store = _store;
     }
 
@@ -31,7 +29,6 @@ public:
         }
         printf("Commit TxN %d\n", s.TnxID);
     }
-}
+};
 
-
-#endif //ENCODINGS_READ_UNCOMMITED_H
+#endif //ENCODINGS_TRANSACTION_H
