@@ -7,14 +7,28 @@
 
 #include <vector>
 
-struct Tnx_item {
+struct Txn_item {
     char cmd;   // r or w
-    int key, val = -1;
+    int key, val;
+
+    Txn_item(char _cmd, int _key, int _val) {
+        cmd = _cmd;
+        key = _key;
+        val = _val;
+    }
 };
 
-struct Tnx {
-    int TnxID = 0;
-    std::vector<Tnx_item> items;
+struct Txn {
+    int TxnID = 0;
+    std::vector<Txn_item> items;
+
+    void setID(int x) {
+        TxnID = x;
+    }
+
+    void insert(char cmd, int key, int val) {
+        items.emplace_back(cmd, key, val);
+    }
 };
 
 #endif //ENCODINGS_TXN_H

@@ -18,7 +18,7 @@ public:
     }
 
     virtual void Get(int key, int &val) = 0;
-    virtual void Put(int key, int val) = 0;
+    virtual void Put(int TID, int key, int val) = 0;
 };
 
 #endif //ENCODINGS_STORAGE_H

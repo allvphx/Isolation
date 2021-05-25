@@ -9,17 +9,30 @@
 #include "../transaction/txn.h"
 #include <cstring>
 #include "storage.h"
+#include "queue"
+
+using namespace std;
 
 class RU_storage: public Storage {
 public:
+    static const int max_txn = 100;
+    std::vector<int> pool[max_txn];
+
     void Get(int key, int &val) {
         val = items[key];
     }
 
-    void Put(int key, int val) {
-        while (!lock_items[key].Exclusive());
+    void Put(int TID, int key, int val) {
+        while (!lock_items[key].Exclusive(TID));
         items[key] = val;
-        lock_items[key].Release();
+        pool[TID].emplace_back(key);
+    }
+
+    void Release(int TID) {
+        for (int i : pool[TID]) {
+            lock_items[i].Release();
+        }
+        pool[TID].clear();
     }
 };
 
