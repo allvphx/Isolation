@@ -16,14 +16,17 @@
 
 class RC_storage : public Storage {
 public:
-    void Get(int key, int &val) {
+    void Get(int TID, int key, int &val) {
         val = items[key];
-        lock_items[key].Release();
+        lock_items[key].Release(TID);
     }
 
     void Put(int TID, int key, int val) {
         items[key] = val;
-        lock_items[key].Release();
+        lock_items[key].Release(TID);
+    }
+
+    void Release(int TID) {
     }
 };
 

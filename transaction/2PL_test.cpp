@@ -1,25 +1,29 @@
 //
+// Created by pan on 26/5/21.
+//
+
+//
 // Created by pan on 25/5/21.
 //
 
-#include "../isolation_levels/read_uncommited.h"
+#include "../isolation_levels/2pl_serializable.h"
 #include "txn.h"
 #include "iostream"
 
 using namespace std;
 
-namespace RC {
-    RU_storage store;
+namespace PL2 {
+    PL2_storage store;
     Txn tx1, tx2;
 
-    void *handleTxn(void* cur) {
-        Txn *s = (Txn*)(cur);
+    void *handleTxn(void *cur) {
+        Txn *s = (Txn *) (cur);
         int ans = 0;
         printf("Begin TxN %d\n", s->TxnID);
-        RU_storage * tmp = &RC::store;
-        for(Txn_item cr : s->items) {
-            printf("%c\n", cr.cmd);
-            if (cr.cmd=='r') {
+        PL2_storage *tmp = &PL2::store;
+        for (Txn_item cr : s->items) {
+            printf("TxN %d: processing %c\n", s->TxnID, cr.cmd);
+            if (cr.cmd == 'r') {
                 tmp->Get(s->TxnID, cr.key, ans);
                 printf("TxN %d: Get(%d) = %d\n", s->TxnID, cr.key, ans);
             } else {
@@ -35,9 +39,9 @@ namespace RC {
 
 #include "pthread.h"
 
-using namespace RC;
+using namespace PL2;
 
-int test_RC() {
+int test_2PL() {
     tx1.setID(1);
     tx1.insert('w', 1, 1);
     tx1.insert('r', 1, -1);

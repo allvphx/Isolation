@@ -6,20 +6,19 @@
 #define ENCODINGS_LOCK_H
 
 #include "mutex"
-
+#include "set"
 
 class Lock {
     std::mutex atom_lock;   // the lock used for atomic execution.
     int8_t state;           // the state of the lock item.
-    int share_count, lock_ID;   // the number of S-lock, the ID of the txn that get the lock.
+    std::set<int> shared_txn;
 
 public:
     const int8_t NL = 0, S = 1,X = 2;
 
     Lock() {
-        share_count = 0;
+        shared_txn.clear();
         state = NL;
-        lock_ID = -1;
     }
 
     Lock(int x) {
@@ -30,30 +29,31 @@ public:
         return state;
     }
 
-    void Release() {
+    void Release(int TID) {
         atom_lock.lock();
         if (state == S) {
-            share_count -= 1;
-            if (share_count == 0) {
+            auto it = shared_txn.find(TID);
+            shared_txn.erase(it);
+            if (shared_txn.empty()) {
                 state = NL;
             }
         } else {
             state = NL;
-            lock_ID = -1;
+            shared_txn.clear();
         }
         atom_lock.unlock();
     }
 
-    bool Share() {
+    bool Share(int TID) {
         atom_lock.lock();
         bool suc = true;
+        bool exist = shared_txn.find(TID) != shared_txn.end();
         if (state == NL) {
             state = S;
-            share_count = 0;
+            shared_txn.insert(TID);
         } else if (state == S) {
-            share_count += 1;
-        } else {
-            share_count = 0;
+            shared_txn.insert(TID);
+        } else if(!(state == X && exist)) {
             suc = false;
         }
         atom_lock.unlock();
@@ -63,11 +63,16 @@ public:
     bool Exclusive(int TID) {
         atom_lock.lock();
         bool suc = true;
-        if (!(state == X && lock_ID == TID) && state != NL) {
-            suc = false;
-        } else {
+        // thread unsafe here.
+        bool exist = shared_txn.find(TID) != shared_txn.end();
+        if (state == X && exist) {
+            suc = true;
+        } else if(state == NL || (state == S && shared_txn.size()==1 && exist)) {
+            shared_txn.clear();
             state = X;
-            lock_ID = TID;
+            shared_txn.insert(TID);
+        } else {
+            suc = false;
         }
         atom_lock.unlock();
         return suc;

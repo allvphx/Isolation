@@ -6,19 +6,30 @@
 #define ENCODINGS_2PL_SERIALIZABLE_H
 
 #include "storage.h"
+#include "vector"
 
 class PL2_storage: public Storage {
 public:
-    void Get(int key, int &val) {
-        while (!lock_items[key].Share());
+    static const int max_txn = 100;
+    std::vector<int> pool[max_txn];
+
+    void Get(int TID, int key, int &val) {
+        while (!lock_items[key].Share(TID));
         val = items[key];
-        lock_items[key].Release();
+        pool[TID].emplace_back(key);
     }
 
-    void Put(int key, int val) {
-        while (!lock_items[key].Exclusive());
+    void Put(int TID, int key, int val) {
+        while (!lock_items[key].Exclusive(TID));
         items[key] = val;
-        lock_items[key].Release();
+        pool[TID].emplace_back(key);
+    }
+
+    void Release(int TID) {
+        for (int i : pool[TID]) {
+            lock_items[i].Release(TID);
+        }
+        pool[TID].clear();
     }
 };
 

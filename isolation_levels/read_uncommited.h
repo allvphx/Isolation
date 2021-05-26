@@ -18,7 +18,7 @@ public:
     static const int max_txn = 100;
     std::vector<int> pool[max_txn];
 
-    void Get(int key, int &val) {
+    void Get(int TID, int key, int &val) {
         val = items[key];
     }
 
@@ -30,7 +30,7 @@ public:
 
     void Release(int TID) {
         for (int i : pool[TID]) {
-            lock_items[i].Release();
+            lock_items[i].Release(TID);
         }
         pool[TID].clear();
     }
