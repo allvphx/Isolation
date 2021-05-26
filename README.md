@@ -12,6 +12,6 @@ Degree 2.5 - snapshot isolation (TBD, using MVCC)
 - MVCC implementation
 - the lost update detection by MVCC
 
-Degree 3 - serializable (done, using 2PL)
+Degree 3 - serializable (doing, using 2PL)
 
 the Phantom is not considered, since only the item read is considered.
