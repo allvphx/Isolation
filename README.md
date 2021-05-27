@@ -6,11 +6,11 @@ Degree 0 - (skip)
 
 Degree 1 - read uncommitted (done)
 
-Degree 2 - read committed (TBD, using 2 version method)
+Degree 2 - read committed (skip, it is just the same with 2 version MVCC)
 
-Degree 2.5 - snapshot isolation (TBD, using MVCC)
+Degree 2.5 - snapshot isolation (done, using MVCC)
 - MVCC implementation
-- the lost update detection by MVCC
+- the lost update detection by MVCC (By serialization and no-wait policy)
 
 Degree 3 - serializable (done, using 2PL)
 

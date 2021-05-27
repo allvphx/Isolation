@@ -55,7 +55,7 @@ namespace MVCC {
 
 using namespace MVCC;
 
-int main() {
+int test_mvcc() {
     tx1.setID(1);
     tx1.insert('w', 1, 1);
     tx1.insert('r', 1, -1);

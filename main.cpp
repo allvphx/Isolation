@@ -4,6 +4,6 @@
 #include "isolation_levels/read_commited.h"
 #include "isolation_levels/read_uncommited.h"
 
-int test() {
+int main() {
     return 0;
 }
