@@ -18,10 +18,10 @@ the Phantom is not considered, since only the item read is considered.
 
 
 # TBD
-v2: use iterator to execute the transactions, add a lock schedulor (with deadlock handler) for degree 1 and degree 3.
+v2: use iterator to execute the transactions, add a lock schedulor (with deadlock handler) for degree 1 and degree 3. (June)
 
-v3: change the storage of degree 1 and degree 3 into real key-value store.
+v3: change the storage of degree 1 and degree 3 into real key-value store. (June)
 
-v4: implement more advanced MVCC.
+v4: implement more advanced MVCC. (June)
 
 v5: consider the range scan operation. (maybe add index & index range lock)
