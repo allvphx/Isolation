@@ -8,7 +8,7 @@
 #include "mutex"
 #include "set"
 
-class Lock {
+class Lock {    // a thread safe 2PL
     std::mutex atom_lock;   // the lock used for atomic execution.
     int8_t state;           // the state of the lock item.
     std::set<int> shared_txn;
