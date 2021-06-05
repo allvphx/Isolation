@@ -18,6 +18,6 @@ the Phantom is not considered, since only the item read is considered.
 
 # Reference Paper
 
-《An Empirical Evaluation ofIn-Memory Multi-Version Concurrency Control》
+《An Empirical Evaluation of In-Memory Multi-Version Concurrency Control》
 
 《A Critique of ANSI SQL Isolation Levels》
