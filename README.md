@@ -16,3 +16,8 @@ Degree 3 - serializable (done, using 2PL)
 
 the Phantom is not considered, since only the item read is considered.
 
+# Reference Paper
+
+《An Empirical Evaluation ofIn-Memory Multi-Version Concurrency Control》
+
+《A Critique of ANSI SQL Isolation Levels》
